@@ -32,9 +32,9 @@ if(!empty($_POST['search'])) {
     if(empty($error_message)) {
         $pdo->beginTransaction();
         try {
-            $stmt = $pdo->prepare("SELECT* FROM board WHERE message LIKE '%こ%'");
+            $stmt = $pdo->prepare("SELECT* FROM board WHERE message LIKE '%:search%'");
 
-            // $stmt->bindParam(':search',$search,PDO::PARAM_STR);
+            $stmt->bindParam(':search',$search,PDO::PARAM_STR);
 
 
             $stmt->execute();
