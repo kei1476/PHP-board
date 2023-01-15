@@ -148,8 +148,8 @@ $pdo = null;
 <hr>
 
 <!-- 検索欄 -->
-<form method="post" name="search_form" action="./search.php">
-    <label for="search">投稿内容を検索</label>
+<form method="post" action="./search.php">
+    <label>投稿内容を検索</label>
     <input type="text" name="search">
     <input type="submit" name="search_btn" value="検索">
 </form>

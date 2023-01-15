@@ -2,8 +2,6 @@
 date_default_timezone_set('Asia/Tokyo');
 
 $current_date = null;
-$message = array();
-$message_array = array();
 $message_data = array();
 $error_message = array();
 $pdo = null;
@@ -17,16 +15,17 @@ try {
         PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
     );
     $pdo = new PDO('mysql:charaset=UTF8;dbname=board;host=localhost','root','',$option);
+
 } catch(PDOExeption $e) {
     $error_message[] = $e->getMessage();
 }
 
-if(!empty($_POST['search'])) {
+if(!empty($_POST['search_btn'])) {
 
     $search = preg_replace( '/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $_POST['search']);
 
     if(empty($search)) {
-        $error_message[] = "検索内容を入力してください。";
+        $error_message[] = '検索内容を入力してください。';
     }
 
     if(empty($error_message)) {
@@ -39,7 +38,7 @@ if(!empty($_POST['search'])) {
 
             $stmt->execute();
 
-            $message_data =  $stmt->fetchAll;
+            $message_data[] = $stmt->fetchAll();
 
         } catch(Exception $e) {
             $pdo->rollBack();
@@ -49,6 +48,7 @@ if(!empty($_POST['search'])) {
 }
 $stmt = null;
 $pdo = null;
+
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +70,7 @@ $pdo = null;
     </ul>
     <?php endif; ?>
 <section>
-    <?php if(!empty($message_data)): ?>
+    <?php if(isset($message_data)): ?>
     <?php foreach($message_data as $value): ?>
     <article>
         <div class="info">
