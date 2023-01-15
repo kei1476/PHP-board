@@ -40,6 +40,8 @@ if(!empty($_POST['search_btn'])) {
 
             $message_data[] = $stmt->fetchAll();
 
+            $pdo->commit();
+
         } catch(Exception $e) {
             $pdo->rollBack();
         }
@@ -70,7 +72,7 @@ $pdo = null;
     </ul>
     <?php endif; ?>
 <section>
-    <?php if(isset($message_data)): ?>
+    <?php if(!empty($message_data)): ?>
     <?php foreach($message_data as $value): ?>
     <article>
         <div class="info">
