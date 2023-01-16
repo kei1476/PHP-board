@@ -24,9 +24,9 @@ if(!empty($_POST['search_btn'])) {
 
     $search = preg_replace( '/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $_POST['search']);
 
-    $search_word = $search.'%';
+    $search_word = '%'.$search.'%';
 
-    if(empty($search_word)) {
+    if(empty($search)) {
         $error_message[] = '検索内容を入力してください。';
     }
 
@@ -40,6 +40,8 @@ if(!empty($_POST['search_btn'])) {
             // $stmt = $pdo->prepare("SELECT* FROM board WHERE message LIKE ?");
 
             // $stmt->execute(['%'.$search.'%']);
+
+            $stmt->execute();
 
             $message_data = $stmt->fetchAll();
 
