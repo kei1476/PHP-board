@@ -65,7 +65,6 @@ if(!empty($_GET['message_id']) && empty($_POST['message_id'])) {
                 $stmt->bindParam( ':title', $title, PDO::PARAM_STR);
 			    $stmt->bindValue( ':id', $_POST['message_id'], PDO::PARAM_INT);
 
-
                 $stmt->execute();
 
                 $res = $pdo->commit();

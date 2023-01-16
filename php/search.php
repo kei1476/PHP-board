@@ -24,21 +24,24 @@ if(!empty($_POST['search_btn'])) {
 
     $search = preg_replace( '/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $_POST['search']);
 
-    if(empty($search)) {
+    $search_word = $search.'%';
+
+    if(empty($search_word)) {
         $error_message[] = '検索内容を入力してください。';
     }
 
     if(empty($error_message)) {
         $pdo->beginTransaction();
         try {
-            $stmt = $pdo->prepare("SELECT* FROM board WHERE message LIKE '%:search%'");
+            $stmt = $pdo->prepare("SELECT* FROM board WHERE message LIKE :search");
 
-            $stmt->bindParam(':search',$search,PDO::PARAM_STR);
+            $stmt->bindParam(':search',$search_word,PDO::PARAM_STR);
 
+            // $stmt = $pdo->prepare("SELECT* FROM board WHERE message LIKE ?");
 
-            $stmt->execute();
+            // $stmt->execute(['%'.$search.'%']);
 
-            $message_data[] = $stmt->fetchAll();
+            $message_data = $stmt->fetchAll();
 
             $pdo->commit();
 
@@ -60,10 +63,10 @@ $pdo = null;
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
-    <title>編集ページ</title>
+    <title>結果ページ</title>
 </head>
 <body>
-   <h1>ひと言掲示板　編集ページ</h1>
+   <h1>検索結果</h1>
    <?php if(!empty($error_message)): ?>
     <ul class="error_message">
         <?php foreach($error_message as $value): ?>
@@ -82,8 +85,11 @@ $pdo = null;
         </div>
         <p><?php echo nl2br($value['message']); ?></p>
     </article>
-        <?php endforeach; ?>
-        <?php endif; ?>
+    <?php endforeach; ?>
+    <?php elseif(empty($message_data)):?>
+        <p><?php echo $_POST['search'].'に該当する書き込みはありません。';?></p>
+    <?php endif; ?>
+    <a href="./index.php">戻る</a>
 </section> 
 </body>
 </html>
