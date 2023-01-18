@@ -33,7 +33,7 @@ if(!empty($_POST['search_btn'])) {
     if(empty($error_message)) {
         $pdo->beginTransaction();
         try {
-            $stmt = $pdo->prepare("SELECT* FROM board WHERE message LIKE :search");
+            $stmt = $pdo->prepare("SELECT* FROM board WHERE  message LIKE :search ORDER BY post_date DESC" );
 
             $stmt->bindParam(':search',$search_word,PDO::PARAM_STR);
 
@@ -88,7 +88,7 @@ $pdo = null;
         <p><?php echo nl2br($value['message']); ?></p>
     </article>
     <?php endforeach; ?>
-    <?php elseif(empty($message_data)):?>
+    <?php elseif(empty($message_data) && !empty($search)):?>
         <p><?php echo $_POST['search'].'に該当する書き込みはありません。';?></p>
     <?php endif; ?>
     <a href="./index.php">戻る</a>
